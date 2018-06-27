@@ -1,8 +1,10 @@
 package ls;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.commons.cli.*;
+
 
 public class Main {
 
@@ -41,14 +43,19 @@ public class Main {
             File rootFile = new File(root);
             FilesList ls = new FilesList(rootFile);
 
+            String result = ls.getList(isReverse, isLong, isHumanReadable);
+
             if (!isOutput) {
-                System.out.println(ls.getList(isReverse, isLong, isHumanReadable));
+                System.out.println(result);
             } else {
-                System.out.println("TODO: implement file output");
+                utils.writeToFile(outputFile, result);
+                System.out.println("Result saved in file " + outputFile);
             }
 
-        } catch (ParseException exp) {
-            System.out.println("Unexpected exception:" + exp.getMessage());
+        } catch (ParseException ex) {
+            System.out.println("Unexpected exception:" + ex.getMessage());
+        } catch (IOException ex) {
+            System.out.println("Exception while writing to file:" + ex.getMessage());
         }
     }
 }
